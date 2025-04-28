@@ -1,0 +1,237 @@
+/* Base styles */
+:root {
+  --primary-color: #004080;
+}
+body {
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+  }
+body {
+  font-family: 'Open Sans', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  color: #000;
+}
+h1, h2, h3, h4, h5 {
+  font-weight: 600;
+  margin: 0;
+}
+h1 { font-size: 1.6em; margin-bottom: 0.5em; }
+h2 { font-size: 1.4em; margin: 1em 0 0.5em; }
+h3 { font-size: 1.2em; margin: 0.5em 0; }
+p {
+  margin: 0;
+  margin-bottom: 0.5em;
+  line-height: 1.5;
+}
+
+/* Navigation */
+nav {
+  background: var(--primary-color);
+  padding: 0.5em 1em;
+}
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+nav li {
+  margin-right: 1em;
+}
+nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+}
+nav a:hover, nav a.active {
+  text-decoration: underline;
+}
+
+/* Main content sections */
+#nuovo-page main, #usato-page main {
+  padding: 2em 1em;
+}
+.intro, .carousel-section, .features, .reviews {
+  padding: 2em 1em;
+}
+
+/* Carousel tabs */
+.carousel-tabs {
+  text-align: center;
+  margin-bottom: 1em;
+}
+.carousel-tabs button {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0.5em 1em;
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  background: #fff;
+  margin-right: 0.5em;
+  border-radius: 5px;
+}
+.carousel-tabs button.active {
+  background: var(--primary-color);
+  color: #fff;
+}
+.carousel-tabs button:focus {
+  outline: none;
+}
+
+/* Car listing containers */
+.carousel-container, .listing-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+.car-card {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 0.5em;
+  background: #fff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+}
+.car-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 5px 5px 0 0;
+}
+.car-card h4 {
+  margin: 0.5em 0 0.2em;
+  font-size: 1.1em;
+}
+.car-card p {
+  margin: 0.2em 0;
+  font-size: 0.95em;
+}
+.car-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* Features section */
+.features .features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5em;
+}
+.feature p {
+  font-size: 0.95em;
+}
+
+/* Reviews section */
+.reviews .rating {
+  font-weight: 600;
+  margin-bottom: 1em;
+}
+.reviews .stars {
+  color: #ffa500;
+}
+.review-list {
+  display: grid;
+  gap: 1em;
+}
+.review {
+  background: #f9f9f9;
+  border-left: 4px solid var(--primary-color);
+  padding: 1em;
+}
+.review-text {
+  font-style: italic;
+}
+.review-author {
+  text-align: right;
+  font-size: 0.9em;
+  margin-top: 0.5em;
+}
+
+/* Table for new car combos */
+.combo-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5em;
+}
+.combo-table th, .combo-table td {
+  border-bottom: 1px solid #ccc;
+  padding: 4px 6px;
+  text-align: left;
+  font-size: 0.9em;
+}
+.combo-table th {
+  background: #f0f0f0;
+  font-weight: 600;
+}
+.combo-table td {
+  vertical-align: top;
+}
+
+/* Used car selectors */
+.combo-selectors {
+  margin: 0.5em 0;
+}
+.combo-selectors label {
+  margin-right: 1em;
+  font-size: 0.9em;
+}
+.combo-selectors select {
+  padding: 2px 4px;
+  font-size: 0.9em;
+}
+.combo-selectors .price {
+  font-weight: 600;
+  margin-top: 0.5em;
+  font-size: 1em;
+}
+
+/* Footer */
+footer {
+  background: #f0f0f0;
+  padding: 1em;
+  text-align: center;
+}
+.footer-contact {
+  text-align: left;
+  display: inline-block;
+  margin-bottom: 1em;
+}
+.footer-contact a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+.footer-contact a:hover {
+  text-decoration: underline;
+}
+.footer-copy {
+  font-size: 0.9em;
+  color: #555;
+}
+.toggle-btn {
+    transition: background-color 0.2s, color 0.2s;
+    background-color: white;
+    color: #2563eb;
+    border: 1px solid #2563eb;
+    cursor: pointer;
+  }
+  
+  .toggle-btn.active {
+    background-color: #2563eb;
+    color: white;
+  }
+  
+  .toggle-btn:hover {
+    background-color: #bfdbfe;
+    color: #2563eb;
+  }
+  
+  .toggle-btn.active:hover {
+    background-color: #2563eb;
+    color: white;
+  }
+  #btn-nuovo, #btn-usato {
+    min-width: 100px;
+  }

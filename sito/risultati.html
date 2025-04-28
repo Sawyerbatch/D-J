@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Risultati Ricerca - Drive&Joy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+  <header class="bg-white shadow sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <a href="index.html">
+        <img src="logo.png" alt="Drive&Joy" class="h-10">
+      </a>
+      <nav class="space-x-6">
+        <a href="index.html" class="hover:text-blue-500">Home</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-4 gap-8">
+    <!-- Sidebar Filtri -->
+    <aside class="bg-white p-6 rounded-lg shadow md:col-span-1">
+      <h2 class="text-lg font-semibold mb-4">Filtra Risultati</h2>
+  
+      <label class="block mb-2 text-sm">Tipologia</label>
+      <select id="filter-tipologia" class="w-full mb-4 p-2 border rounded">
+        <option value="">Entrambi</option>
+        <option value="nuovo">Solo Nuovo</option>
+        <option value="usato">Solo Usato</option>
+      </select>
+  
+      <label class="block mb-2 text-sm">Brand</label>
+      <select id="filter-brand" class="w-full mb-4 p-2 border rounded"></select>
+  
+      <label class="block mb-2 text-sm">Modello</label>
+      <select id="filter-model" class="w-full mb-4 p-2 border rounded"></select>
+  
+      <label class="block mb-2 text-sm">Alimentazione</label>
+      <select id="filter-alim" class="w-full mb-4 p-2 border rounded"></select>
+  
+      <label class="block mb-2 text-sm">Cambio</label>
+      <select id="filter-cambio" class="w-full mb-4 p-2 border rounded"></select>
+  
+      <label class="block mb-2 text-sm">Canone massimo</label>
+      <input id="filter-canone" type="range" min="0" value="1000" class="w-full">
+      <div class="text-sm text-gray-600 mt-1">Fino a: <span id="canone-val">1000</span> €</div>
+  
+      <!-- Pulsanti Cerca e Reset -->
+      <div class="flex gap-2 mt-4">
+        <button id="btn-applica" class="w-1/2 bg-blue-600 text-white rounded p-2 font-semibold hover:bg-blue-700">Cerca</button>
+        <button id="btn-reset" class="w-1/2 border border-gray-400 text-gray-700 rounded p-2 font-semibold hover:bg-gray-100">Reset</button>
+      </div>
+    </aside>
+  
+    <!-- Risultati -->
+    <section class="md:col-span-3">
+      <h1 class="text-2xl font-bold mb-6">Auto trovate</h1>
+      <div id="results-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </section>
+  </main>
+
+  <script src="js/risultati.js"></script>
+</body>
+</html>
+    

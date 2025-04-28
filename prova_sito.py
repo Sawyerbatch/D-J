@@ -1,77 +1,74 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Apr 18 19:47:41 2025
-
-@author: utente
-"""
-
 import streamlit as st
 import pandas as pd
+import os
 
 st.set_page_config(page_title="Drive&Joy", layout="wide")
 
-st.title("🚗 Drive&Joy - Offerte Auto")
+# 🌐 CSS estetico
+st.markdown("""
+    <style>
+    .card {
+        background-color: #1f2937;
+        padding: 1rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    }
+    .card h3 {
+        color: white;
+        margin-bottom: 0.2rem;
+    }
+    .card p {
+        margin: 0.2rem 0;
+        color: #d1d5db;
+    }
+    .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
-# Caricamento del file
-uploaded_file = st.file_uploader("Carica il file 'Drive_&_Joy_ALD.csv'", type=["csv"])
+# 🚗 HEADER HOMEPAGE
+st.markdown("""
+    <div style="background-color:#111827;padding:2rem 2rem;border-radius:12px">
+        <h1 style="color:white;margin-bottom:0.5rem;">🚗 Drive&Joy</h1>
+        <p style="color:#9ca3af;font-size:1.2rem;">Auto nuove e usate selezionate per te • Tutte disponibili in leasing o noleggio</p>
+    </div>
+""", unsafe_allow_html=True)
 
-if uploaded_file:
-    df = pd.read_csv(uploaded_file, sep=";")
+# 📥 Carica dati
+file_path = os.path.join("data", "Drive_&_Joy_ALD.csv")
+try:
+    df = pd.read_csv(file_path, sep=";")
+except:
+    st.error("⚠️ Impossibile caricare il file CSV.")
+    st.stop()
 
-    # Selezione tipologia
-    tipologia_scelta = st.radio("Seleziona tipologia di veicolo", ["Auto Nuove", "Auto Usate"])
-    if tipologia_scelta == "Auto Nuove":
-        df = df[df["Tipologia"].str.lower().str.contains("nuovo", na=False)]
-    else:
-        df = df[df["Tipologia"].str.lower().str.contains("usato", na=False)]
+# Mostra tutto, no filtro iniziale
+st.markdown("<div class='gallery'>", unsafe_allow_html=True)
 
-    # Filtri
-    st.sidebar.header("🔍 Filtra i veicoli")
-    brand = st.sidebar.multiselect("Marca", sorted(df["Brand"].dropna().unique()))
-    alimentazione = st.sidebar.multiselect("Alimentazione", sorted(df["Alimentazione"].dropna().unique()))
-    cambio = st.sidebar.multiselect("Cambio", sorted(df["Cambio"].dropna().unique()))
+for idx, row in df.iterrows():
+    image_url = row.get("Immagine Copertina", "")
+    titolo = f"{row['Brand']} {row['Modello']}"
+    allestimento = row.get("Allestimento", "")
+    prezzo = row.get("Prezzo", "N/D")
+    alimentazione = row.get("Alimentazione", "")
+    cambio = row.get("Cambio", "")
+    trazione = row.get("Trazione", "")
+    pronta = row.get("Pronta Consegna", "")
 
-    if brand:
-        df = df[df["Brand"].isin(brand)]
-    if alimentazione:
-        df = df[df["Alimentazione"].isin(alimentazione)]
-    if cambio:
-        df = df[df["Cambio"].isin(cambio)]
+    st.markdown(f"""
+    <div class="card">
+        <img src="{image_url if pd.notna(image_url) else 'https://via.placeholder.com/300x200?text=No+Image'}" style="width:100%;border-radius:10px;">
+        <h3>{titolo}</h3>
+        <p>{allestimento}</p>
+        <p><strong>Prezzo:</strong> € {prezzo}</p>
+        <p><strong>Alimentazione:</strong> {alimentazione} | <strong>Cambio:</strong> {cambio}</p>
+        <p><strong>Trazione:</strong> {trazione} | <strong>Pronta consegna:</strong> {pronta}</p>
+    </div>
+    """, unsafe_allow_html=True)
 
-    # Visualizzazione
-    for i, row in df.iterrows():
-        with st.container():
-            cols = st.columns([1, 2])
-            with cols[0]:
-                img_url = row.get("Immagine Copertina", "")
-                if pd.notna(img_url) and img_url.startswith("http"):
-                    st.image(img_url, caption=f"{row['Brand']} {row['Modello']}", use_column_width=True)
-            with cols[1]:
-                st.subheader(f"{row['Brand']} {row['Modello']} - {row.get('Allestimento', '')}")
-                st.write(f"**Prezzo**: € {row.get('Prezzo', 'N/D')}")
-                st.write(f"**Alimentazione**: {row.get('Alimentazione', '')}")
-                st.write(f"**Cambio**: {row.get('Cambio', '')}")
-                st.write(f"**Trazione**: {row.get('Trazione', '')}")
-                st.write(f"**Pronta Consegna**: {row.get('Pronta Consegna', '')}")
-
-                # Combinazioni di noleggio
-                opzioni = []
-                for x in range(1, 9):
-                    anticipo = row.get(f"Anticipo {x}")
-                    durata = row.get(f"Durata {x}")
-                    km = row.get(f"Km {x}")
-                    canone = row.get(f"Canone {x}")
-                    if pd.notna(anticipo) and pd.notna(durata) and pd.notna(km) and pd.notna(canone):
-                        opzioni.append(f"{anticipo}€ anticipo | {durata} mesi | {km} km → {canone}€/mese")
-                if opzioni:
-                    scelta = st.selectbox("💰 Scegli la formula di noleggio/leasing", opzioni, key=f"opt_{i}")
-                st.button("📩 Richiedi info", key=f"info_{i}")
-
-                # Player
-                player_url = row.get("Link al player", "")
-                if pd.notna(player_url) and player_url.startswith("http"):
-                    st.markdown(f"🔊 **Anteprima**")
-                    st.components.v1.iframe(player_url, height=300)
-
-else:
-    st.info("Carica un file CSV per iniziare.")
+st.markdown("</div>", unsafe_allow_html=True)

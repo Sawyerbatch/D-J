@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drive&Joy | Auto Nuova</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+  <!-- Header -->
+  <header class="bg-white shadow sticky top-0 z-50">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-blue-600">Drive&Joy</h1>
+      <nav class="space-x-6">
+        <a href="index.html" class="hover:text-blue-500">Home</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN DETTAGLIO -->
+  <main class="max-w-6xl mx-auto px-4 py-12">
+    <div id="auto-dettaglio"></div>
+  </main>
+
+  <footer class="bg-white py-6 text-center text-sm text-gray-500 border-t">
+    © 2025 Drive&Joy - Lifeadv S.r.l. - P. IVA 13493031002
+  </footer>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const brand = params.get('brand');
+    const model = params.get('model');
+
+    let autoCorrente = null;
+
+    function cleanImageUrl(url) {
+      return url && url !== '-' ? url.trim() : 'data/no_car.png';
+    }
+
+    function parseCSV(csvText) {
+      const results = Papa.parse(csvText, {
+        header: true,
+        delimiter: ";",
+        skipEmptyLines: true
+      });
+
+      return results.data.map(row => {
+        const image = cleanImageUrl(row['Immagine Copertina']);
+        const combos = [];
+        const start = results.meta.fields.indexOf('Anticipo 1');
+        for (let i = 0; i < 8; i++) {
+          const a = row[results.meta.fields[start + i * 4]];
+          const d = row[results.meta.fields[start + i * 4 + 1]];
+          const k = row[results.meta.fields[start + i * 4 + 2]];
+          const c = row[results.meta.fields[start + i * 4 + 3]];
+          if (a && c && a !== '-' && c !== '-') {
+            combos.push({ anticipo: a, durata: d, km: k, canone: c });
+          }
+        }
+        if (combos.length === 0) return null;
+        return {
+          brand: row['Brand'],
+          model: row['Modello'],
+          allestimento: row['Allestimento'],
+          alimentazione: row['Alimentazione'],
+          cambio: row['Cambio'],
+          combos,
+          image
+        };
+      }).filter(Boolean);
+    }
+
+    function aggiornaCanone() {
+      const durata = document.getElementById('durata-select').value;
+      const km = document.getElementById('km-select').value;
+      const anticipo = document.getElementById('anticipo-select').value;
+      const canoneBox = document.getElementById('canone-box');
+
+      const combo = autoCorrente.combos.find(c => c.durata === durata && c.km === km && c.anticipo === anticipo);
+      canoneBox.innerHTML = combo
+        ? `<span class="text-red-600 text-2xl font-bold">€ ${combo.canone}</span>`
+        : `<span class="text-gray-500">N/A</span>`;
+    }
+
+    function renderAuto(auto) {
+      autoCorrente = auto;
+
+      const durate = [...new Set(auto.combos.map(c => c.durata))];
+      const kmValori = [...new Set(auto.combos.map(c => c.km))];
+      const anticipi = [...new Set(auto.combos.map(c => c.anticipo))];
+
+      return `
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <div class="grid md:grid-cols-2 gap-8">
+            <div>
+              <img src="${auto.image}" alt="${auto.brand} ${auto.model}" class="rounded w-full h-64 object-cover">
+              <h1 class="text-3xl font-bold mt-4">${auto.brand} ${auto.model}</h1>
+              <p class="text-gray-600 text-sm mb-2">${auto.allestimento}</p>
+              <div class="grid grid-cols-2 gap-2 text-sm mt-4">
+                <p><strong>Alimentazione:</strong> ${auto.alimentazione}</p>
+                <p><strong>Cambio:</strong> ${auto.cambio}</p>
+              </div>
+            </div>
+            <div class="bg-gray-50 p-4 rounded shadow-inner">
+              <h2 class="font-semibold mb-4">Personalizza il tuo preventivo</h2>
+              <label class="block text-sm font-medium mb-1">Durata in mesi</label>
+              <select id="durata-select" class="w-full p-2 border rounded mb-3">
+                ${durate.map(d => `<option value="${d}">${d}</option>`).join('')}
+              </select>
+
+              <label class="block text-sm font-medium mb-1">Km/anno</label>
+              <select id="km-select" class="w-full p-2 border rounded mb-3">
+                ${kmValori.map(k => `<option value="${k}">${k}</option>`).join('')}
+              </select>
+
+              <label class="block text-sm font-medium mb-1">Anticipo</label>
+              <select id="anticipo-select" class="w-full p-2 border rounded mb-3">
+                ${anticipi.map(a => `<option value="${a}">${a}</option>`).join('')}
+              </select>
+
+              <p class="mt-4">Canone Mensile:</p>
+              <div id="canone-box" class="text-lg font-bold mt-1 text-blue-600">-</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    fetch('data/new_cars.csv')
+      .then(r => r.text())
+      .then(csv => {
+        const cars = parseCSV(csv);
+        const auto = cars.find(a => a.brand === brand && a.model === model);
+        if (auto) {
+          document.getElementById('auto-dettaglio').innerHTML = renderAuto(auto);
+          document.getElementById('durata-select').addEventListener('change', aggiornaCanone);
+          document.getElementById('km-select').addEventListener('change', aggiornaCanone);
+          document.getElementById('anticipo-select').addEventListener('change', aggiornaCanone);
+          aggiornaCanone();
+        } else {
+          document.getElementById('auto-dettaglio').innerHTML = '<p class="text-center text-gray-600">Auto non trovata.</p>';
+        }
+      });
+  </script>
+</body>
+</html>

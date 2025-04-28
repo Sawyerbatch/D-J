@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Premium car rental and unique travel experiences - Explore the world in style with our luxury vehicles and personalized tours">
+    <title>VoyageDrive | Premium Car Rental & Travel Experiences</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            min-height: 90vh;
+        }
+        
+        .service-card:hover, .car-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .search-form input, .search-form select {
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .car-detail-image {
+            height: 400px;
+            object-fit: cover;
+            width: 100%;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        .mobile-menu {
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link.active {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+        
+        /* Loading spinner */
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3b82f6;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Price badge */
+        .price-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+    </style>
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
+
+</head>
+<body class="font-sans bg-gray-50 text-gray-800">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#home" class="text-2xl font-bold text-blue-600">
+                        <span class="text-gray-900">Voyage</span>Drive
+                    </a>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="nav-link active px-3 py-2 rounded-md text-sm font-medium hover:text-blue-600 transition">Home</a>
+                    <a href="#about" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:text-blue-600 transition">About Us</a>
+                    <a href="#search-cars" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:text-blue-600 transition">Our Fleet</a>
+                    <a href="#services" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:text-blue-600 transition">Services</a>
+                    <a href="#blog" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:text-blue-600 transition">Blog</a>
+                    <a href="#contact" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:text-blue-600 transition">Contact</a>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-500 hover:text-gray-900 focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu hidden md:hidden bg-white shadow-lg">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#home" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Home</a>
+                <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">About Us</a>
+                <a href="#search-cars" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Our Fleet</a>
+                <a href="#services" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Services</a>
+                <a href="#blog" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Blog</a>
+                <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero flex items-center justify-center text-white pt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6">Journey Beyond Limits</h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">Premium car rentals and unforgettable travel experiences tailored just for you</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#search-cars" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition duration-300 transform hover:scale-105">
+                    Explore Our Fleet
+                </a>
+                <a href="#contact" class="bg-transparent border-2 border-white hover:bg-white hover:text-gray-900 text-white px-8 py-3 rounded-lg font-medium transition duration-300 transform hover:scale-105">
+                    Book Now
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Car Search Section -->
+    <section id="search-cars" class="py-16 bg-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-8">Find Your Perfect Vehicle</h2>
+            
+            <!-- Search Form -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-12">
+                <form id="car-search-form" class="search-form grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                        <label for="brand" class="block text-sm font-medium text-gray-700 mb-1">Brand</label>
+                        <select id="brand" name="brand" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">All Brands</option>
+                            <!-- Brands will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="model" class="block text-sm font-medium text-gray-700 mb-1">Model</label>
+                        <select id="model" name="model" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">All Models</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="type" class="block text-sm font-medium text-gray-700 mb-1">Vehicle Type</label>
+                        <select id="type" name="type" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">All Types</option>
+                            <option value="Sedan">Sedan</option>
+                            <option value="SUV">SUV</option>
+                            <option value="Coupe">Coupe</option>
+                            <option value="Convertible">Convertible</option>
+                            <option value="Sports Car">Sports Car</option>
+                            <option value="Luxury">Luxury</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="fuel" class="block text-sm font-medium text-gray-700 mb-1">Fuel Type</label>
+                        <select id="fuel" name="fuel" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">All Fuel Types</option>
+                            <option value="Gasoline">Gasoline</option>
+                            <option value="Diesel">Diesel</option>
+                            <option value="Hybrid">Hybrid</option>
+                            <option value="Electric">Electric</option>
+                        </select>
+                    </div>
+                    
+                    <div class="md:col-span-2 lg:col-span-4 flex justify-center">
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition duration-300">
+                            Search Vehicles
+                        </button>
+                        <button type="reset" class="ml-4 bg-gray-300 hover:bg-gray-400 text-gray-800 px-8 py-3 rounded-lg font-medium transition duration-300">
+                            Reset Filters
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Search Results -->
+            <div id="search-results" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Cars will be loaded here by JavaScript -->
+                <div class="text-center py-12" id="loading-indicator">
+                    <div class="loader"></div>
+                    <p class="mt-4 text-gray-600">Loading vehicles...</p>
+                </div>
+            </div>
+
+            <!-- Featured Cars Section -->
+            <section id="featured-cars" class="py-16 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold text-center mb-12">Featured Vehicles</h2>
+                <div class="swiper featuredSwiper">
+                    <div class="swiper-wrapper" id="car-carousel">
+                    <!-- Cars will be inserted here by JavaScript -->
+                    </div>
+                    <div class="swiper-pagination mt-6"></div>
+                </div>
+                </div>
+            </section>
+  
+            
+            <!-- Individual Car Modal -->
+            <div id="car-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
+                <div class="bg-white rounded-xl max-w-6xl w-full max-h-screen overflow-y-auto">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 id="modal-car-title" class="text-2xl font-bold"></h3>
+                            <button id="close-modal" class="text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-times text-2xl"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <div>
+                                <div class="relative mb-4">
+                                    <img id="modal-car-image" src="" alt="Car Image" class="car-detail-image rounded-lg">
+                                    <div class="price-badge">
+                                        <span id="modal-car-price"></span>/day
+                                    </div>
+                                </div>
+                                
+                                <div id="modal-car-video" class="rounded-lg overflow-hidden mb-4">
+                                    <!-- Video player will be inserted here -->
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="bg-gray-100 p-6 rounded-lg mb-6">
+                                    <h4 class="font-bold text-lg mb-4">Rental Options</h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="rental-options">
+                                        <!-- Rental options will be inserted here -->
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <h4 class="font-bold text-lg mb-4">Vehicle Specifications</h4>
+                                    <div class="grid grid-cols-2 gap-4" id="car-specs">
+                                        <!-- Specifications will be inserted here -->
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-center">
+                                    <button id="book-now-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition duration-300">
+                                        Book Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
+                <div class="mb-12 lg:mb-0">
+                    <h2 class="text-3xl font-bold mb-6">Our Story</h2>
+                    <p class="text-gray-600 mb-4">
+                        Founded in 2010, VoyageDrive began with a simple mission: to transform ordinary travel into extraordinary experiences. What started as a small luxury car rental service has grown into a premier provider of bespoke travel adventures.
+                    </p>
+                    <p class="text-gray-600 mb-6">
+                        Our team of travel enthusiasts and automotive experts work tirelessly to curate unforgettable journeys, whether you're exploring city streets or remote landscapes.
+                    </p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h3 class="font-bold text-blue-600 mb-2">500+</h3>
+                            <p class="text-gray-600">Vehicles in Fleet</p>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h3 class="font-bold text-blue-600 mb-2">10K+</h3>
+                            <p class="text-gray-600">Satisfied Customers</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Our office" class="rounded-lg shadow-lg w-full">
+                    <div class="absolute -bottom-6 -right-6 bg-white p-4 rounded-lg shadow-lg w-3/4">
+                        <h3 class="font-bold mb-2">Our Commitment</h3>
+                        <p class="text-gray-600 text-sm">We're dedicated to providing exceptional service, meticulously maintained vehicles, and travel experiences that create lasting memories.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Team Section -->
+            <div class="mt-24">
+                <h2 class="text-3xl font-bold text-center mb-12">Meet Our Team</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Team Member 1 -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-lg text-center p-6">
+                        <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Sarah Johnson" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-blue-100">
+                        <h3 class="text-xl font-bold mb-1">Sarah Johnson</h3>
+                        <p class="text-blue-600 mb-4">Founder & CEO</p>
+                        <p class="text-gray-600 mb-4">With 15 years in the luxury travel industry, Sarah's vision drives our company forward.</p>
+                        <div class="flex justify-center space-x-4">
+                            <a href="#" class="text-blue-600 hover:text-blue-800"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-blue-600 hover:text-blue-800"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                    
+                    <!-- Team Member 2 -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-lg text-center p-6">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael Chen" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-blue-100">
+                        <h3 class="text-xl font-bold mb-1">Michael Chen</h3>
+                        <p class="text-blue-600 mb-4">Operations Director</p>
+                        <p class="text-gray-600 mb-4">Michael ensures every vehicle meets our exacting standards and every journey is flawless.</p>
+                        <div class="flex justify-center space-x-4">
+                            <a href="#" class="text-blue-600 hover:text-blue-800"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-blue-600 hover:text-blue-800"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                    
+                    <!-- Team Member 3 -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-lg text-center p-6">
+                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Elena Rodriguez" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-blue-100">
+                        <h3 class="text-xl font-bold mb-1">Elena Rodriguez</h3>
+                        <p class="text-blue-600 mb-4">Travel Experience Designer</p>
+                        <p class="text-gray-600 mb-4">Elena crafts personalized itineraries that reveal the hidden gems of every destination.</p>
+                        <div class="flex justify-center space-x-4">
+                            <a href="#" class="text-blue-600 hover:text-blue-800"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-blue-600 hover:text-blue-800"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-16 bg-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-4">Our Services</h2>
+            <p class="text-gray-600 text-center max-w-3xl mx-auto mb-12">We offer more than just car rentals - we provide complete travel solutions tailored to your needs.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="service-card bg-white rounded-xl overflow-hidden shadow-lg p-8 transition duration-300">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fas fa-car text-4xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Premium Car Rentals</h3>
+                    <p class="text-gray-600 mb-4">
+                        Choose from our extensive fleet of luxury and specialty vehicles, all meticulously maintained and regularly upgraded.
+                    </p>
+                    <ul class="mb-6 space-y-2">
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span>Short-term and long-term rentals</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span>24/7 roadside assistance</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span>Flexible pickup/drop-off options</span>
+                        </li>
+                    </ul>
+                    <a href="#" class="text-blue-600 font-medium hover:text-blue-800 inline-flex items-center">
+                        Learn More <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <!-- Service 2 -->
+                <div class="service-card bg-white rounded-xl overflow-hidden shadow-lg p-8 transition duration-300">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fas fa-route text-4xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Personalized Tours</h3>
+                    <p class="text-gray-600 mb-4">
+                        Let our experts design a custom itinerary that matches your interests, whether you're a foodie, history buff, or adventure seeker.
+                    </p>
+                    <ul class="mb-6 space-y-2">
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span>Private guided experiences</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span>Off-the-beaten-path destinations</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span>Local expert guides</span>
+                        </li>
+                    </ul>
+                    <a href="#" class="text-blue-600 font-medium hover:text-blue-800 inline-flex items-center">
+                        Learn More <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <!-- Service 3 -->
+                <div class="service-card bg-white rounded-xl overflow-hidden shadow-lg p-8 transition duration-300">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fas fa-suitcase-rolling text-4xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Complete Travel Packages</h3>
+                    <p class="text-gray-600 mb-4">
+                        Stress-free travel with everything arranged - luxury accommodations, dining reservations, activities, and transportation.
+                    </p>
+                    <ul class="mb-6 space-y-2">
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span>All-inclusive options available</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span>VIP access to exclusive events</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span>24/7 concierge service</span>
+                        </li>
+                    </ul>
+                    <a href="#" class="text-blue-600 font-medium hover:text-blue-800 inline-flex items-center">
+                        Learn More <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Additional Services -->
+            <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Service 4 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg p-8">
+                    <div class="flex items-start">
+                        <div class="text-blue-600 mr-6">
+                            <i class="fas fa-business-time text-3xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-3">Corporate Services</h3>
+                            <p class="text-gray-600">
+                                Tailored transportation solutions for business travelers, including airport transfers, executive car services, and complete event logistics.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Service 5 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg p-8">
+                    <div class="flex items-start">
+                        <div class="text-blue-600 mr-6">
+                            <i class="fas fa-ring text-3xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-3">Special Occasions</h3>
+                            <p class="text-gray-600">
+                                Make your wedding, anniversary, or milestone celebration unforgettable with our luxury vehicle rentals and event coordination.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-16 bg-blue-600 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12">What Our Clients Say</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card p-8 rounded-xl">
+                    <div class="flex items-center mb-4">
+                        <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="James Wilson" class="w-12 h-12 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-bold">James Wilson</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="italic mb-4">
+                        "The Porsche 911 rental made my weekend getaway unforgettable. Impeccable service from start to finish!"
+                    </p>
+                    <p class="text-sm text-blue-200">June 15, 2023</p>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card p-8 rounded-xl">
+                    <div class="flex items-center mb-4">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Sophia Martinez" class="w-12 h-12 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-bold">Sophia Martinez</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="italic mb-4">
+                        "The personalized wine country tour was beyond expectations. Our guide knew all the hidden gems!"
+                    </p>
+                    <p class="text-sm text-blue-200">May 3, 2023</p>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card p-8 rounded-xl">
+                    <div class="flex items-center mb-4">
+                        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Robert Chen" class="w-12 h-12 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-bold">Robert Chen</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="italic mb-4">
+                        "Our corporate retreat transportation was flawlessly executed. Will definitely use VoyageDrive again."
+                    </p>
+                    <p class="text-sm text-blue-200">April 22, 2023</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-4">Latest From Our Blog</h2>
+            <p class="text-gray-600 text-center max-w-3xl mx-auto mb-12">Travel tips, automotive news, and destination inspiration from our experts.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Blog Post 1 -->
+                <article class="bg-white rounded-xl overflow-hidden shadow-lg transition duration-300 hover:shadow-xl">
+                    <div class="overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1685&q=80" alt="Mountain road" class="w-full h-48 object-cover transition duration-500 hover:scale-105">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center text-sm text-gray-500 mb-3">
+                            <span>June 12, 2023</span>
+                            <span class="mx-2">•</span>
+                            <span>Travel Tips</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Top 10 Scenic Drives for Your Summer Road Trip</h3>
+                        <p class="text-gray-600 mb-4">
+                            Discover breathtaking routes that combine stunning landscapes with excellent driving roads for the ultimate summer adventure.
+                        </p>
+                        <a href="#" class="text-blue-600 font-medium hover:text-blue-800 inline-flex items-center">
+                            Read More <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </article>
+                
+                <!-- Blog Post 2 -->
+                <article class="bg-white rounded-xl overflow-hidden shadow-lg transition duration-300 hover:shadow-xl">
+                    <div class="overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1494905998402-395d579af36f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Electric car" class="w-full h-48 object-cover transition duration-500 hover:scale-105">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center text-sm text-gray-500 mb-3">
+                            <span>May 28, 2023</span>
+                            <span class="mx-2">•</span>
+                            <span>Automotive</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">The Future of Luxury: Electric Vehicles in Our Fleet</h3>
+                        <p class="text-gray-600 mb-4">
+                            We're expanding our electric vehicle offerings. Learn about the latest luxury EVs and what to expect from driving electric.
+                        </p>
+                        <a href="#" class="text-blue-600 font-medium hover:text-blue-800 inline-flex items-center">
+                            Read More <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </article>
+                
+                <!-- Blog Post 3 -->
+                <article class="bg-white rounded-xl overflow-hidden shadow-lg transition duration-300 hover:shadow-xl">
+                    <div class="overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1527631746610-bca00a040d60?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Italian coast" class="w-full h-48 object-cover transition duration-500 hover:scale-105">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center text-sm text-gray-500 mb-3">
+                            <span>May 15, 2023</span>
+                            <span class="mx-2">•</span>
+                            <span>Destinations</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Driving the Amalfi Coast: A Complete Guide</h3>
+                        <p class="text-gray-600 mb-4">
+                            Everything you need to know to navigate Italy's most famous coastline, from the best stops to driving tips for the winding roads.
+                        </p>
+                        <a href="#" class="text-blue-600 font-medium hover:text-blue-800 inline-flex items-center">
+                            Read More <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </article>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="#" class="inline-block bg-gray-800 hover:bg-gray-900 text-white px-6 py-3 rounded-lg font-medium transition">
+                    View All Articles
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold mb-6">Ready for Your Next Adventure?</h2>
+            <p class="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+                Whether you need a luxury vehicle for a special occasion or a complete travel experience, we're here to make it unforgettable.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#contact" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition duration-300 transform hover:scale-105">
+                    Contact Us
+                </a>
+                <a href="tel:+18005551234" class="bg-transparent border-2 border-white hover:bg-white hover:text-gray-900 text-white px-8 py-3 rounded-lg font-medium transition duration-300 transform hover:scale-105">
+                    <i class="fas fa-phone mr-2"></i> (800) 555-1234
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12">Get In Touch</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Contact Form -->
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <h3 class="text-xl font-bold mb-6">Send Us a Message</h3>
+                    <form class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                            <input type="text" id="name" name="name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Your name" required>
+                        </div>
+                        
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                            <input type="email" id="email" name="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="your.email@example.com" required>
+                        </div>
+                        
+                        <div>
+                            <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="(123) 456-7890">
+                        </div>
+                        
+                        <div>
+                            <label for="service" class="block text-sm font-medium text-gray-700 mb-1">Service Interested In</label>
+                            <select id="service" name="service" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                                <option value="">Select a service</option>
+                                <option value="car-rental">Car Rental</option>
+                                <option value="personalized-tour">Personalized Tour</option>
+                                <option value="travel-package">Complete Travel Package</option>
+                                <option value="corporate">Corporate Services</option>
+                                <option value="special-occasion">Special Occasion</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Your Message</label>
+                            <textarea id="message" name="message" rows="5" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Tell us about your travel plans or questions..." required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Contact Info -->
+                <div>
+                    <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                        <h3 class="text-xl font-bold mb-6">Contact Information</h3>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start">
+                                <div class="text-blue-600 mr-4 mt-1">
+                                    <i class="fas fa-map-marker-alt text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1">Our Location</h4>
+                                    <p class="text-gray-600">123 Luxury Avenue<br>Beverly Hills, CA 90210</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="text-blue-600 mr-4 mt-1">
+                                    <i class="fas fa-phone-alt text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1">Phone</h4>
+                                    <p class="text-gray-600">
+                                        <a href="tel:+18005551234" class="hover:text-blue-600">(800) 555-1234</a><br>
+                                        <a href="tel:+18185551234" class="hover:text-blue-600">(818) 555-1234</a>
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="text-blue-600 mr-4 mt-1">
+                                    <i class="fas fa-envelope text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1">Email</h4>
+                                    <p class="text-gray-600">
+                                        <a href="mailto:info@voyagedrive.com" class="hover:text-blue-600">info@voyagedrive.com</a><br>
+                                        <a href="mailto:reservations@voyagedrive.com" class="hover:text-blue-600">reservations@voyagedrive.com</a>
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="text-blue-600 mr-4 mt-1">
+                                    <i class="fas fa-clock text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1">Hours</h4>
+                                    <p class="text-gray-600">
+                                        Monday - Friday: 8:00 AM - 8:00 PM<br>
+                                        Saturday: 9:00 AM - 6:00 PM<br>
+                                        Sunday: 10:00 AM - 4:00 PM
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Map -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3304.453399221963!2d-118.4008379245372!3d34.0738800731436!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2bc85a7261c1d%3A0x4a01d8d6d8a3b1d4!2sBeverly%20Hills%20CA%2090210!5e0!3m2!1sen!2sus!4v1689876543210!5m2!1sen!2sus" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- About Column -->
+                <div>
+                    <h3 class="text-lg font-bold mb-4">About VoyageDrive</h3>
+                    <p class="text-gray-400 mb-4">
+                        Premium car rentals and bespoke travel experiences since 2010. We're committed to making every journey extraordinary.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-400 hover:text-white">Home</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-white">About Us</a></li>
+                        <li><a href="#search-cars" class="text-gray-400 hover:text-white">Our Fleet</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-white">Services</a></li>
+                        <li><a href="#blog" class="text-gray-400 hover:text-white">Blog</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Services -->
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Services</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Luxury Car Rentals</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Personalized Tours</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Travel Packages</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Corporate Services</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Special Occasions</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Newsletter -->
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Newsletter</h3>
+                    <p class="text-gray-400 mb-4">
+                        Subscribe to receive travel tips, special offers, and updates on our newest vehicles and experiences.
+                    </p>
+                    <form class="flex">
+                        <input type="email" placeholder="Your email" class="px-4 py-2 rounded-l-lg focus:outline-none text-gray-900 w-full">
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-r-lg">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 mb-4 md:mb-0">
+                    &copy; 2023 VoyageDrive. All rights reserved.
+                </p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-white">Sitemap</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 bg-blue-600 text-white p-3 rounded-full shadow-lg opacity-0 invisible transition-all duration-300">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Close mobile menu when clicking on a link
+        const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+        
+        // Back to top button
+        const backToTopButton = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('opacity-0', 'invisible');
+                backToTopButton.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopButton.classList.remove('opacity-100', 'visible');
+                backToTopButton.classList.add('opacity-0', 'invisible');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        // Highlight active navigation link based on scroll position
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                
+                if (pageYOffset >= sectionTop - 300) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+        
+        // Form submission
+        const contactForm = document.querySelector('.contact-form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('Thank you for your message! We will get back to you soon.');
+                contactForm.reset();
+            });
+        }
+
+        // Google Sheets Integration for Car Listings
+        const SHEET_ID = '1w7cr8sSZ1E3x9ipIGq7l4XepM3c-wOlX_QiydORJvmQ';
+        const SHEET_NAME = 'Drive_&_Joy_ALD'; // The gid parameter from your URL
+        const API_KEY = 'AIzaSyDi_MjmzliJhkHyei52cbaIRd-ciHa_ago'; // Note: In production, this should be secured server-side
+        
+        let allCars = [];
+        let filteredCars = [];
+        
+        // Fetch data from Google Sheets
+        async function fetchCarData() {
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const searchResults = document.getElementById('search-results');
+            
+            try {
+                const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`);
+                const data = await response.json();
+
+                console.log(data); // 👈 AGGIUNGI QUESTO
+                
+                if (data.values && data.values.length > 1) {
+                    const headers = data.values[0];
+                    const rows = data.values.slice(1);
+                    
+                    allCars = rows.map(row => {
+                        let car = {};
+                        headers.forEach((header, index) => {
+                            // Clean up header names by removing any extra spaces or special characters
+                            const cleanHeader = header.trim();
+                            car[cleanHeader] = row[index] || '';
+                        });
+                        return car;
+                    });
+                    
+                    // Populate search filters
+                    populateBrandFilter();
+                    
+                    // Display all cars initially
+                    displayCars(allCars);
+                    
+                    // Hide loading indicator
+                    loadingIndicator.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Error fetching car data:', error);
+                loadingIndicator.innerHTML = '<p class="text-red-500">Error loading vehicles. Please try again later.</p>';
+            }
+        }
+        
+        // Populate brand filter dropdown
+        function populateBrandFilter() {
+            const brandSelect = document.getElementById('brand');
+            
+            // Get unique brands
+            const brands = [...new Set(allCars.map(car => car.Brand))].filter(b => b);
+            
+            // Sort brands alphabetically
+            brands.sort();
+            
+            // Add options to select
+            brands.forEach(brand => {
+                const option = document.createElement('option');
+                option.value = brand;
+                option.textContent = brand;
+                brandSelect.appendChild(option);
+            });
+        }
+        
+        // Update model filter based on selected brand
+        document.getElementById('brand').addEventListener('change', function() {
+            const brand = this.value;
+            const modelSelect = document.getElementById('model');
+            
+            // Clear existing options
+            modelSelect.innerHTML = '<option value="">All Models</option>';
+            
+            if (brand) {
+                // Get unique models for selected brand
+                const models = [...new Set(
+                    allCars
+                        .filter(car => car.Brand === brand)
+                        .map(car => car.Modello)
+                )].filter(m => m);
+                
+                // Sort models alphabetically
+                models.sort();
+                
+                // Add options to select
+                models.forEach(model => {
+                    const option = document.createElement('option');
+                    option.value = model;
+                    option.textContent = model;
+                    modelSelect.appendChild(option);
+                });
+            }
+        });
+        
+        // Handle search form submission
+        document.getElementById('car-search-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const brand = document.getElementById('brand').value;
+            const model = document.getElementById('model').value;
+            const type = document.getElementById('type').value;
+            const fuel = document.getElementById('fuel').value;
+            
+            // Filter cars based on search criteria
+            filteredCars = allCars.filter(car => {
+                return (!brand || car.Brand === brand) &&
+                       (!model || car.Modello === model) &&
+                       (!type || car['Tipo Veicolo'] === type) &&
+                       (!fuel || car.Alimentazione === fuel);
+            });
+            
+            displayCars(filteredCars);
+        });
+        
+        // Reset search form
+        document.querySelector('button[type="reset"]').addEventListener('click', function() {
+            document.getElementById('car-search-form').reset();
+            document.getElementById('model').innerHTML = '<option value="">All Models</option>';
+            displayCars(allCars);
+        });
+        
+        // Display cars in the search results
+        function displayCars(cars) {
+            const searchResults = document.getElementById('search-results');
+            
+            if (cars.length === 0) {
+                searchResults.innerHTML = '<div class="col-span-3 text-center py-12"><p class="text-gray-600">No vehicles match your search criteria. Please try different filters.</p></div>';
+                return;
+            }
+            
+            searchResults.innerHTML = '';
+            
+            cars.forEach(car => {
+                const carCard = document.createElement('div');
+                carCard.className = 'car-card bg-white rounded-xl overflow-hidden shadow-lg transition duration-300 hover:shadow-xl';
+                
+                // Use the image from the spreadsheet or a placeholder if not available
+                const carImage = car['Immagine Copertina'] || 'https://images.unsplash.com/photo-1494972308805-463bc619d34e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80';
+                
+                // Use the first available price or a default
+                const price = car['Canone 1'] ? `$${car['Canone 1']}` : 'Call for price';
+                
+                carCard.innerHTML = `
+                    <div class="relative">
+                        <img src="${carImage}" alt="${car.Brand} ${car.Modello}" class="w-full h-64 object-cover">
+                        <div class="price-badge">${price}</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">${car.Brand} ${car.Modello}</h3>
+                        <p class="text-gray-600 mb-4">${car.Allestimento || 'Premium rental vehicle'}</p>
+                        <div class="grid grid-cols-2 gap-2 mb-4">
+                            <div>
+                                <span class="text-sm text-gray-500">Fuel</span>
+                                <p class="font-medium">${car.Alimentazione || 'N/A'}</p>
+                            </div>
+                            <div>
+                                <span class="text-sm text-gray-500">Power</span>
+                                <p class="font-medium">${car['Potenza Massima CV'] || 'N/A'} CV</p>
+                            </div>
+                            <div>
+                                <span class="text-sm text-gray-500">Transmission</span>
+                                <p class="font-medium">${car.Cambio || 'N/A'}</p>
+                            </div>
+                            <div>
+                                <span class="text-sm text-gray-500">Seats</span>
+                                <p class="font-medium">${car.Posti || 'N/A'}</p>
+                            </div>
+                        </div>
+                        <button class="view-details w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition" data-car-id="${car.Id}">
+                            View Details
+                        </button>
+                    </div>
+                `;
+                
+                searchResults.appendChild(carCard);
+            });
+            
+            // Add event listeners to all "View Details" buttons
+            document.querySelectorAll('.view-details').forEach(button => {
+                button.addEventListener('click', function() {
+                    const carId = this.getAttribute('data-car-id');
+                    showCarDetails(carId);
+                });
+            });
+        }
+        
+        // Show car details in modal
+        function showCarDetails(carId) {
+            const car = allCars.find(c => c.Id === carId);
+            if (!car) return;
+            
+            const modal = document.getElementById('car-modal');
+            const modalTitle = document.getElementById('modal-car-title');
+            const modalImage = document.getElementById('modal-car-image');
+            const modalPrice = document.getElementById('modal-car-price');
+            const modalVideo = document.getElementById('modal-car-video');
+            const rentalOptions = document.getElementById('rental-options');
+            const carSpecs = document.getElementById('car-specs');
+            
+            // Set basic info
+            modalTitle.textContent = `${car.Brand} ${car.Modello} ${car.Allestimento || ''}`;
+            modalImage.src = car['Immagine Copertina'] || 'https://images.unsplash.com/photo-1494972308805-463bc619d34e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80';
+            modalImage.alt = `${car.Brand} ${car.Modello}`;
+            
+            // Set price (use first available price)
+            const price = car['Canone 1'] ? car['Canone 1'] : 'Call';
+            modalPrice.textContent = price === 'Call' ? price : `$${price}`;
+            
+            // Add video if available
+            if (car['Link al player']) {
+                modalVideo.innerHTML = `
+                    <iframe width="100%" height="315" src="${car['Link al player']}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                `;
+            } else {
+                modalVideo.innerHTML = '';
+            }
+            
+            // Add rental options
+            rentalOptions.innerHTML = '';
+            for (let i = 1; i <= 8; i++) {
+                if (car[`Canone ${i}`]) {
+                    rentalOptions.innerHTML += `
+                        <div class="bg-white p-4 rounded-lg shadow">
+                            <h5 class="font-bold mb-2">Option ${i}</h5>
+                            <p class="text-sm text-gray-600 mb-1">Duration: ${car[`Durata ${i}`]} months</p>
+                            <p class="text-sm text-gray-600 mb-1">Mileage: ${car[`Km ${i}`]} km</p>
+                            <p class="text-sm text-gray-600 mb-1">Deposit: $${car[`Anticipo ${i}`] || '0'}</p>
+                            <p class="text-lg font-bold text-blue-600">$${car[`Canone ${i}`]}/month</p>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Add specifications
+            carSpecs.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-gas-pump text-blue-500 mr-2"></i>
+                    <span class="text-sm">Fuel: ${car.Alimentazione || 'N/A'}</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-tachometer-alt text-blue-500 mr-2"></i>
+                    <span class="text-sm">Power: ${car['Potenza Massima CV'] || 'N/A'} CV</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-cogs text-blue-500 mr-2"></i>
+                    <span class="text-sm">Transmission: ${car.Cambio || 'N/A'}</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-users text-blue-500 mr-2"></i>
+                    <span class="text-sm">Seats: ${car.Posti || 'N/A'}</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-car-side text-blue-500 mr-2"></i>
+                    <span class="text-sm">Type: ${car['Tipo Veicolo'] || 'N/A'}</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-weight text-blue-500 mr-2"></i>
+                    <span class="text-sm">Weight: ${car.Peso || 'N/A'} kg</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-leaf text-blue-500 mr-2"></i>
+                    <span class="text-sm">CO2: ${car['Emissioni C02'] || 'N/A'} g/km</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-fire text-blue-500 mr-2"></i>
+                    <span class="text-sm">Consumption: ${car['Consumo Combinato'] || 'N/A'} l/100km</span>
+                </div>
+            `;
+            
+            // Show modal
+            modal.classList.remove('hidden');
+            
+            // Add event listener to book now button
+            document.getElementById('book-now-btn').addEventListener('click', function() {
+                alert(`Thank you for your interest in the ${car.Brand} ${car.Modello}. Our team will contact you shortly to complete your booking.`);
+                modal.classList.add('hidden');
+            });
+        }
+        
+        // Close modal when clicking X button
+        document.getElementById('close-modal').addEventListener('click', function() {
+            document.getElementById('car-modal').classList.add('hidden');
+        });
+        
+        // Close modal when clicking outside content
+        document.getElementById('car-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+            }
+        });
+        
+        // Initialize the page by fetching car data
+        document.addEventListener('DOMContentLoaded', fetchCarData);
+    </script>
+
+
+    
+</body>
+</html>
