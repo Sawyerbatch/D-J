@@ -2,75 +2,23 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Drive&Joy | Noleggio Auto a Lungo Termine</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 
-<script>
-    function parseCSV(csvText, isNew) {
-      const results = Papa.parse(csvText, { header: true, delimiter: ";", skipEmptyLines: true });
-      const sanitize = s => s ? s.replace(/§/g, '').replace(/\n|\r/g, '').trim() : '';
-      const cars = [];
-    
-      for (const row of results.data) {
-        const imageRaw = isNew ? row['Immagine Copertina'] : row['Immagine Principale'];
-        const image = imageRaw && imageRaw !== '-' ? imageRaw.trim() : 'data/no_car.png';
-        const brand = row['Brand'];
-        const model = row['Modello'];
-        const allestimento = sanitize(row['Allestimento']);
-        const alimentazione = row['Alimentazione'];
-        const cambio = row['Cambio'];
-    
-        const combos = [];
-        const comboCount = isNew ? 8 : 40;
-        const idx = h => results.meta.fields.indexOf(h);
-        const start = idx('Anticipo 1');
-    
-        for (let i = 0; i < comboCount; i++) {
-          const a = row[results.meta.fields[start + i * 4]];
-          const d = row[results.meta.fields[start + i * 4 + 1]];
-          const k = row[results.meta.fields[start + i * 4 + 2]];
-          const c = row[results.meta.fields[start + i * 4 + 3]];
-          if (a && c && a !== '-' && c !== '-') {
-            combos.push({ anticipo: a, durata: d, km: k, canone: c });
-          }
-        }
-    
-        if (combos.length === 0) continue;
-    
-        cars.push({ tipo: isNew ? 'nuovo' : 'usato', brand, model, allestimento, alimentazione, cambio, combos, image });
-      }
-    
-      return cars;
-    }
-    
-    function getBestCombo(combos) {
-      return combos.reduce((best, c) => parseFloat(c.canone) < parseFloat(best.canone) ? c : best, combos[0]);
-    }
-    
-    fetch('data/new_cars.csv')
-      .then(r => r.text())
-      .then(csv1 => {
-        const autoNuove = parseCSV(csv1, true);
-        return fetch('data/used_cars.csv').then(r => r.text()).then(csv2 => {
-          const autoUsate = parseCSV(csv2, false);
-          const tutteLeAuto = [...autoNuove, ...autoUsate];
-          initFilters(tutteLeAuto); // ⚠️ SOLO i FILTRI
-        });
-      });
-    </script>
-    
-
-<body class="bg-gray-50 text-gray-800 font-sans">
+<body
+  class="text-gray-800 font-sans bg-fixed bg-cover bg-center"
+  style="background-image: url('background.png');"
+>
   <!-- Navbar -->
   <nav class="bg-white shadow fixed w-full z-50">
-    <div class="max-w-7xl mx-auto px-4 flex justify-between items-center h-16">
-        <a href="index.html">
-            <img src="logo.png" alt="Drive&Joy" class="h-10">
-          </a>
+    <div class="max-w-7xl mx-auto px-4 flex justify-between items-center h-20">
+      <a href="index.html">
+        <img src="logo.png" alt="Drive&Joy" class="h-14"> <!-- da h-10 a h-14 -->
+      </a>
       <div class="hidden md:flex gap-6">
         <a href="index.html" class="text-blue-600 font-semibold">Home</a>
         <a href="#contatti" class="hover:text-blue-600">Contatti</a>
@@ -78,131 +26,139 @@
     </div>
   </nav>
 
-  <!-- Hero -->
-  <section class="pt-20 bg-cover bg-center h-[70vh] flex items-center justify-center text-white text-center" style="background-image: url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1920&q=80');">
-    <div class="bg-black bg-opacity-50 p-6 rounded-lg max-w-xl">
-      <h1 class="text-4xl font-bold mb-4">Noleggia la tua prossima auto con Drive&Joy</h1>
-      <p class="text-lg">Auto nuove e usate a lungo termine con le migliori condizioni sul mercato.</p>
+  <!-- Hero dinamico -->
+  <section
+    class="relative h-[70vh] flex items-center justify-center text-white text-center bg-fixed bg-cover bg-center"
+    style="background-image: url('background.png');"
+  >
+    <div
+    class="bg-black bg-opacity-40 p-8 rounded-2xl shadow-xl backdrop-blur-md max-w-2xl mt-12">
+
+      <h1 class="text-4xl font-bold mb-4">
+        Noleggia la tua prossima auto con Drive&Joy
+      </h1>
+      <p class="text-lg">
+        Auto nuove e usate a breve, medio e lungo termine con le migliori
+        condizioni sul mercato.
+      </p>
+      <a href="#auto-filter" class="cta-button inline-block mt-6"
+        >Scopri le offerte</a
+      >
     </div>
   </section>
 
   <!-- Filtro Avanzato Auto -->
-<div id="auto-filter" class="max-w-6xl mx-auto mt-8 p-6 bg-white rounded-2xl shadow grid grid-cols-1 md:grid-cols-5 gap-4">
+  <div
+    id="auto-filter"
+    class="max-w-6xl mx-auto mt-1 p-6 bg-white rounded-2xl shadow grid grid-cols-1 md:grid-cols-5 gap-4"
+  >
     <!-- Tipologia -->
     <div>
-        <label for="filter-tipologia" class="block text-sm font-medium text-gray-700 mb-1">Tipologia</label>
-        <select id="filter-tipologia" class="w-full border rounded-lg p-2">
-        <option value="">Tutte</option>
+      <label
+        for="filter-tipologia"
+        class="block text-sm font-medium text-gray-700 mb-1"
+        >Tipologia</label
+      >
+      <select
+        id="filter-tipologia"
+        class="w-full border rounded-lg p-2"
+      >
+        <option value="">Nuovo e Usato</option>
         <option value="nuovo">Solo Nuovo</option>
         <option value="usato">Solo Usato</option>
-        </select>
+      </select>
     </div>
     <!-- Brand -->
     <div>
-      <label for="filter-brand" class="block text-sm font-medium text-gray-700 mb-1">Brand</label>
+      <label
+        for="filter-brand"
+        class="block text-sm font-medium text-gray-700 mb-1"
+        >Brand</label
+      >
       <select id="filter-brand" class="w-full border rounded-lg p-2">
         <option value="">Tutti</option>
       </select>
     </div>
     <!-- Modello -->
     <div>
-      <label for="filter-model" class="block text-sm font-medium text-gray-700 mb-1">Modello</label>
+      <label
+        for="filter-model"
+        class="block text-sm font-medium text-gray-700 mb-1"
+        >Modello</label
+      >
       <select id="filter-model" class="w-full border rounded-lg p-2">
         <option value="">Tutti</option>
       </select>
     </div>
     <!-- Alimentazione -->
     <div>
-      <label for="filter-alim" class="block text-sm font-medium text-gray-700 mb-1">Alimentazione</label>
+      <label
+        for="filter-alim"
+        class="block text-sm font-medium text-gray-700 mb-1"
+        >Alimentazione</label
+      >
       <select id="filter-alim" class="w-full border rounded-lg p-2">
         <option value="">Tutte</option>
       </select>
     </div>
     <!-- Cambio -->
     <div>
-      <label for="filter-cambio" class="block text-sm font-medium text-gray-700 mb-1">Cambio</label>
+      <label
+        for="filter-cambio"
+        class="block text-sm font-medium text-gray-700 mb-1"
+        >Cambio</label
+      >
       <select id="filter-cambio" class="w-full border rounded-lg p-2">
         <option value="">Tutti</option>
       </select>
     </div>
 
-    <div class="md:col-span-5 flex justify-center mt-4">
-        <button id="btn-cerca" class="w-1/2 max-w-xs px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow hover:bg-blue-700 transition">
-          Cerca
-        </button>
+    <!-- Canone massimo -->
+    <div>
+      <label for="filter-canone" class="block text-sm font-medium text-gray-700 mb-1">Canone massimo</label>
+      <input
+        type="range"
+        id="filter-canone"
+        min="0"
+        max="5000"
+        step="10"
+        class="w-full"
+      />
+      <div class="flex justify-between text-sm text-gray-600 mt-1">
+        <span id="canone-min">0</span>
+        <span id="canone-val">5000</span>
       </div>
+    </div>
+
+    <div class="md:col-span-5 flex justify-center mt-4">
+      <button id="btn-applica" class="btn-primary w-1/2 max-w-xs">Cerca</button>
+      <button id="btn-reset" class="btn-secondary w-1/2 max-w-xs ml-4">Reset</button>
+    </div>
   </div>
-  
-  <script>
-    // Auto-initialize filter options from loaded cars
-    function initFilters(data) {
-        const tipoSel = document.getElementById("filter-tipologia");
-        const brandSel = document.getElementById("filter-brand");
-        const modelSel = document.getElementById("filter-model");
-        const alimSel = document.getElementById("filter-alim");
-        const cambioSel = document.getElementById("filter-cambio");
-
-        const updateOptions = (select, values) => {
-            const uniqueSorted = [...new Set(values)].sort();
-            select.innerHTML = '<option value="">Tutti</option>' +
-            uniqueSorted.map(v => `<option value="${v}">${v}</option>`).join('');
-        };
-
-        const applyCascata = () => {
-            const tipo = tipoSel?.value || '';
-            const brand = brandSel?.value || '';
-
-            let filtrate = tipo ? data.filter(c => c.tipo === tipo) : [...data];
-            updateOptions(brandSel, filtrate.map(c => c.brand));
-
-            filtrate = brand ? filtrate.filter(c => c.brand === brand) : filtrate;
-            updateOptions(modelSel, filtrate.map(c => c.model));
-            updateOptions(alimSel, filtrate.map(c => c.alimentazione));
-            updateOptions(cambioSel, filtrate.map(c => c.cambio));
-        };
-
-        tipoSel?.addEventListener('change', applyCascata);
-        brandSel?.addEventListener('change', applyCascata);
-
-        // Avvio iniziale
-        applyCascata();
-        }
-
-  
-    function applyFilters(cars) {
-      const brand = document.getElementById("filter-brand").value;
-      const model = document.getElementById("filter-model").value;
-      const alim = document.getElementById("filter-alim").value;
-      const cambio = document.getElementById("filter-cambio").value;
-      const maxCanone = parseFloat(document.getElementById("filter-canone").value);
-  
-      const filtered = cars.filter(c => {
-        const best = getBestCombo(c.combos);
-        return (!brand || c.brand === brand) &&
-               (!model || c.model === model) &&
-               (!alim || c.alimentazione === alim) &&
-               (!cambio || c.cambio === cambio) &&
-               parseFloat(best.canone) <= maxCanone &&
-               c.image !== 'data/no_car.png';
-      });
-  
-      document.getElementById('home-nuovo').innerHTML = renderCarCards(filtered);
-    }
-  </script>
-  
 
   <!-- Carosello Toggle -->
   <section class="max-w-7xl mx-auto py-12">
     <div class="max-w-6xl mx-auto mt-10 px-4">
-        <h2 class="text-2xl font-bold text-gray-800 mb-4">Le migliori offerte della settimana</h2>
-        <div class="flex space-x-4">
-          <button id="btn-nuovo" class="toggle-btn active px-4 py-2 rounded border text-sm font-semibold">Nuovo</button>
-          <button id="btn-usato" class="toggle-btn px-4 py-2 rounded border text-sm font-semibold">Usato</button>
-        </div>
+      <h2
+        class="text-3xl md:text-4xl font-extrabold tracking-tight text-white drop-shadow mb-6"
+      >
+        Le migliori offerte del mese
+      </h2>
+      <div class="flex space-x-4">
+        <button id="btn-nuovo" class="btn-toggle active">Nuovo</button>
+        <button id="btn-usato" class="btn-toggle">Usato</button>
       </div>
-    
-    <div id="home-nuovo" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6"></div>
-    <div id="home-usato" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6 hidden"></div>
+      <div id="results-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6"></div>
+    </div>
+
+    <div
+      id="home-nuovo"
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6"
+    ></div>
+    <div
+      id="home-usato"
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6 hidden"
+    ></div>
   </section>
 
   <!-- Contatti -->
@@ -210,14 +166,22 @@
     <div class="max-w-7xl mx-auto px-4">
       <h3 class="text-xl font-bold mb-2">Lifeadv S.r.l.</h3>
       <p>Via del Casale Lumbroso 110, 00166 Roma</p>
-      <p>Email: <a href="mailto:italia@driveandjoy.it" class="text-blue-400">italia@driveandjoy.it</a></p>
-      <p>Tel: <a href="tel:+39337273351" class="text-blue-400">+39 337 273351</a></p>
-      <p class="text-sm text-gray-400 mt-4">© 2025 Lifeadv S.r.l. Unipersonale - P. IVA 13493031002</p>
+      <p>
+        Email:
+        <a href="mailto:italia@driveandjoy.it" class="text-blue-400"
+          >italia@driveandjoy.it</a
+        >
+      </p>
+      <p>
+        Tel: <a href="tel:+39337273351" class="text-blue-400">+39 337 273351</a>
+      </p>
+      <p class="text-sm text-gray-400 mt-4">
+        © 2025 Lifeadv S.r.l. Unipersonale - P. IVA 13493031002
+      </p>
     </div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-
+  <!-- Includi il file JS modificato -->
   <script src="js/script.js"></script>
 </body>
 </html>
